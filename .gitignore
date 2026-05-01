@@ -9,3 +9,6 @@ Thumbs.db
 # Scratch files
 Claude/Scratch/*
 !Claude/Scratch/.gitkeep
+
+# Graphify output (local analysis tool — not for repo)
+graphify-out/

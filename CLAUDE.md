@@ -66,3 +66,11 @@ Vault skills live in `Claude/Toolbox/Skills/`. Read the skill file to execute.
 | `vault-ingest.md` | Processing Inbox/ items or raw materials into notes |
 | `vault-lint.md` | Monthly health check — broken links, stale notes, missing frontmatter |
 | `read-project-notes.md` | Get structured project context (used by agent profiles) |
+
+## Graphify
+
+This vault has a graphify knowledge graph at `graphify-out/`.
+
+- Before answering architecture or vault structure questions, read `graphify-out/GRAPH_REPORT.md` for god nodes and community structure
+- If `graphify-out/wiki/index.md` exists, navigate it instead of reading raw files
+- After modifying vault files in this session, run `/graphify . --update` to keep the graph current
