@@ -2,7 +2,7 @@
 tags:
   - type/guide
   - status/stable
-created: 2026-03-22
+created: {{date}}
 ---
 
 # Your First Project
@@ -11,10 +11,10 @@ How to set up a project in the vault and get Claude Code oriented to it.
 
 ## 1. Create the Project Folder
 
-Inside `Projects/`, create a subfolder named after your project:
+Inside `Projects/_Active/`, create a subfolder named after your project:
 
 ```
-Projects/
+Projects/_Active/
 └── My App/
     ├── Current State.md     ← required
     ├── Decisions Log.md     ← recommended
@@ -24,8 +24,10 @@ Projects/
 You can create these manually in Obsidian or from the terminal:
 
 ```bash
-mkdir -p ~/code/vault/Projects/"My App"
+mkdir -p ~/code/claude-vault/Projects/_Active/"My App"
 ```
+
+See `Templates/PROJECT-PROTOCOL.md` for the full template and all file schemas.
 
 ---
 
@@ -38,9 +40,9 @@ This is the most important file. Claude reads it at session start to orient itse
 tags:
   - project/active
   - type/current-state
-  - status/building
 created: YYYY-MM-DD
 updated: YYYY-MM-DD
+status: building
 ---
 
 # Current State — My App
@@ -53,66 +55,53 @@ Current phase, what's working, what's in progress.
 
 ## What's Done
 - [x] Completed thing
-- [x] Another completed thing
 
 ## What's Still Missing
 - [ ] Next thing to build
-- [ ] Open question to resolve
 
 ## Immediate Next Steps
 1. First thing to do
-2. Second thing to do
 
 ## Key Decisions Made
 - Why we chose X over Y
-- Why the architecture is structured this way
 ```
 
 ---
 
 ## 3. Register the Project in CLAUDE.md
 
-Open `CLAUDE.md` and add your project to the Active Projects section:
+Open `CLAUDE.md` and add your project to the Active Projects table:
 
 ```markdown
 ## Active Projects
-- [[Projects/My App/Current State]] — brief description of what this project is
+
+| Project | Path | Status |
+|---------|------|--------|
+| My App | `Projects/_Active/My App/` | brief one-line status |
 ```
 
-Claude Code loads `CLAUDE.md` automatically. From that point forward, every session starts with Claude already knowing your active projects and knowing to read their Current State.
+Claude Code loads `CLAUDE.md` automatically. From that point forward, every session starts with Claude already knowing your active projects.
 
 ---
 
-## 4. Add a Decisions Log (Recommended)
+## 4. Update index.md
 
-As you make architecture decisions, append them here. Either manually or via `promote-to-obsidian.py` if you're running the full stack.
-
-```markdown
----
-tags:
-  - project/active
-  - type/decisions-log
-created: YYYY-MM-DD
----
-
-# Decisions Log — My App
-
-*Architecture and implementation decisions, newest first.*
-
-## YYYY-MM-DD
-
-- Chose X over Y because Z
-- Decided not to implement W — added complexity with no clear benefit
-```
+Add your project to the `_Active/` list in `index.md` so the master catalog stays current.
 
 ---
 
-## 5. Make the Vault Your Own (Git Setup)
+## 5. Add to Roadmap.md (Recommended)
 
-This template is a starting point — you should detach it from the template remote and push to your own private repository so the vault is yours, portable, and not shared with anyone.
+Add a row to `Projects/Roadmap.md` with the current gate or milestone. This is useful for multi-project contexts where sequencing matters.
+
+---
+
+## 6. Make the Vault Your Own (Git Setup)
+
+This template is a starting point — detach it from the template remote and push to your own private repository.
 
 ```bash
-cd ~/code/vault
+cd ~/code/claude-vault
 
 # Remove the template remote
 git remote remove origin
@@ -122,39 +111,20 @@ git remote add origin git@github.com:<your-username>/<your-vault-repo>.git
 git push -u origin main
 ```
 
-From that point, commit and push normally as your vault grows:
-
-```bash
-git add Projects/"My App"/
-git commit -m "project: My App - initial setup"
-git push origin main
-```
-
-On any other machine, clone your private vault repo:
-
-```bash
-git clone git@github.com:<your-username>/<your-vault-repo>.git ~/code/vault
-```
-
-Now the project context is portable — `git pull` on any machine and Claude is immediately oriented.
+From that point, end sessions with `vault-session-close` to commit and push automatically.
 
 ---
 
 ## Session Protocol
 
-**At session start:** Claude reads `CLAUDE.md` (automatic), then reads `Current State.md` for the active project.
+**At session start:** Claude reads `CLAUDE.md` (automatic), then reads `hot.md` for the session cache.
 
-**At session end:** Update `Current State.md` to reflect what changed, then append a session log:
-
-```
-Claude/Session-Logs/YYYY-MM-DD.md
-```
-
-This keeps the vault accurate without requiring manual curation between sessions.
+**At session end:** Run `vault-session-close` — updates `hot.md`, `Current State.md`, writes a session log, and pushes to git.
 
 ---
 
 ## References
 
+- [[Templates/PROJECT-PROTOCOL]] — full file schemas and templates
 - [[When Memory Systems Help]] — deciding how much infrastructure to add
 - [[Deployment Patterns]] — full stack vs vault-only

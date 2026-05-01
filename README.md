@@ -1,4 +1,4 @@
-# Claude Memory — Obsidian Vault Template
+# Claude Vault — Obsidian Vault Template
 
 A pre-configured Obsidian vault that pairs with [claude-memory](https://github.com/rjames-dev/claude-memory) to give Claude Code persistent, structured memory across sessions. The vault provides the human-readable narrative layer; claude-memory provides the deep technical archive.
 
@@ -16,20 +16,15 @@ Three guides are included in the `Getting Started/` folder:
 
 ## Setup
 
-This vault is cloned automatically by `setup-hooks.sh` during claude-memory installation.
-You do not need to clone it manually.
-
-If you want to set it up manually:
-
 ```bash
-git clone https://github.com/rjames-dev/obsidian-vault-template ~/code/vault
+git clone https://github.com/rjames-dev/obsidian-vault-template ~/code/claude-vault
 ```
 
-Then open Obsidian → **Open folder as vault** → point to `~/code/vault`.
+Then open Obsidian → **Open folder as vault** → point to `~/code/claude-vault`.
 
-> **Important:** This template repo is a starting point, not your vault's home. Once cloned, detach from this remote and push to your own private repository so your vault is portable and personal:
+> **Important:** Detach from the template remote and push to your own private repository:
 > ```bash
-> cd ~/code/vault
+> cd ~/code/claude-vault
 > git remote remove origin
 > git remote add origin git@github.com:<you>/<your-vault>.git
 > git push -u origin main
@@ -38,40 +33,71 @@ Then open Obsidian → **Open folder as vault** → point to `~/code/vault`.
 ## Folder Structure
 
 ```
-vault/
-├── Calendar/          # Calendar and scheduling notes
-├── Claude/
-│   ├── Knowledge-Base/    # Distilled facts, patterns, learnings
-│   │   └── Learnings Log.md   # Auto-populated by promote-to-obsidian
-│   ├── Scratch/           # Temporary drafts (gitignored)
-│   └── Session-Logs/      # Per-session logs (auto-written by agent)
-├── Events/            # Events and happenings
-├── Projects/          # One subfolder per project
-│   └── <Project Name>/
-│       ├── Current State.md   # Living project status
-│       ├── Decisions Log.md   # Architecture decisions (auto-appended)
-│       └── Open Questions.md  # Unresolved questions
-├── Research/          # Background knowledge and references
-└── CLAUDE.md          # Auto-loaded by Claude Code every session
+claude-vault/
+  hot.md              ← session cache (read first every session)
+  index.md            ← master catalog of vault contents
+  log.md              ← append-only AI operations log
+  CLAUDE.md           ← auto-loaded by Claude Code; session protocol
+  Inbox/              ← zero-friction capture; process with vault-ingest
+  Projects/
+    _Active/          ← current work
+    _Parked/          ← paused, will resume
+    _Archive/         ← done or abandoned
+    Roadmap.md        ← project sequence and dependencies
+  Research/           ← background knowledge by topic
+  Knowledge/          ← reusable technical patterns
+    Learnings Log.md  ← auto-populated errors and lessons
+  Templates/          ← PRD, project protocol
+  Claude/
+    Session-Logs/     ← per-session summaries (auto-written by summary-agent)
+    Toolbox/          ← harness reference: agents, skills, hooks, MCP, commands
+      Skills/         ← vault-native skill files
+      Agents/
+        Profiles/     ← agent profile files
+    Scratch/          ← temp drafts (gitignored)
+  Getting Started/    ← guides for new users
 ```
 
 ## How It Works
 
-1. **claude-memory** captures every Claude Code session automatically via PreCompact hook
-2. After significant sessions, run `promote-to-obsidian.py <snapshot_id>` to write insights here
-3. The agent writes: session log, decisions, learnings — based on what the session contains
-4. Obsidian becomes a live, auto-populated knowledge base of your development work
+### Session Start
+1. `CLAUDE.md` is loaded automatically by Claude Code
+2. Claude reads `hot.md` — one file, complete context, immediately oriented
+3. Claude reads `Projects/_Active/<name>/Current State.md` for the active project
 
-## Making It Your Own
+### During a Session
+- Drop things in `Inbox/` and say "run vault-ingest" to turn them into proper notes
+- Compactions auto-update `hot.md` and (if claude-memory is running) capture the session
 
-- Edit `CLAUDE.md` to add your active projects
-- Add `[[Projects/<Name>/Current State]]` links for each project you start
-- The vault is a private git repo — push to your own remote to keep it portable
+### Session End
+Run "vault-session-close" — updates `hot.md`, `Current State.md`, writes a session log, and pushes to git.
+
+## Vault Skills
+
+Four vault-native skills are included:
+
+| Skill | Purpose |
+|-------|---------|
+| `vault-session-close` | End-of-session: update hot.md, current state, session log, git push |
+| `vault-ingest` | Process Inbox/ items or pasted content into proper vault notes |
+| `vault-lint` | Monthly health check: broken links, stale notes, missing frontmatter |
+| `read-project-notes` | Structured project context (used by agent profiles) |
+
+Skills live in `Claude/Toolbox/Skills/`. Invoke by name: "run vault-ingest", "lint the vault".
+
+## Agent Profiles
+
+Two agent profiles are included in `Claude/Toolbox/Agents/Profiles/`:
+
+| Profile | Purpose |
+|---------|---------|
+| `feature-brief` | Pre-coding context brief — explores codebase + queries memory history |
+| `context-deep-dive` | Project re-orientation — synthesizes vault + claude-memory into a single brief |
 
 ## What Gets Committed
 
 - All `.md` notes
 - `.obsidian/` config (plugins, theme, hotkeys) — keeps settings in sync across machines
-- `CLAUDE.md`
+- `CLAUDE.md`, `hot.md`, `index.md`, `log.md`
 
-**Not committed:** `workspace.json` (machine-specific), Scratch/ contents, `.DS_Store`
+**Not committed:** `workspace.json` (machine-specific), `Claude/Scratch/` contents, `.DS_Store`

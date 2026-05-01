@@ -1,39 +1,68 @@
 # Claude Context — Vault Root
 
-This file is automatically loaded by Claude Code at the start of every session.
-Keep it concise — every line costs context tokens.
-
-## Vault Overview
-This is an Obsidian vault paired with the claude-memory system.
-
-**Folders:**
-- `Calendar/` — calendar and scheduling notes
-- `Claude/` — Claude's working folder (session logs, knowledge base, scratch)
-- `Events/` — events and happenings
-- `Projects/` — active and archived projects
-- `Research/` — background knowledge, references, reading notes
-
-## Claude's Working Space
-- `Claude/Session-Logs/` — write a session summary at the end of each conversation
-- `Claude/Knowledge-Base/` — distilled facts, patterns, and reusable insights
-- `Claude/Scratch/` — drafts and temporary work in progress
+Loaded automatically every session. Keep it concise.
 
 ## Session Protocol
-**Start:** Read this file (done), then read `Projects/<Name>/Current State.md` for any active project.
-**End:** Update `Current State.md`, append a log to `Claude/Session-Logs/YYYY-MM-DD.md`.
 
-## Formatting Conventions
-- YAML frontmatter on all notes with `tags`, `created`, `status`
-- Headings for structure (not bold text)
-- Wikilinks `[[Note Name]]` for internal links
-- Callouts `> [!note]` for highlighted info
-- Nested tags: `#project/active`, `#status/draft`, `#type/log`
+**Start:**
+1. Read `hot.md` — single-file session cache, gets you up to speed immediately
+2. Read `Projects/_Active/<name>/Current State.md` for any project you'll be working on
 
-## Authorship
-At session start, run `git config user.name` and store the result as the session author.
-If the command returns nothing, fall back to `whoami`.
-Add an `author` field to the YAML frontmatter of every `.md` file you create or append to.
+**End:**
+Run the `vault-session-close` skill (or read `Claude/Toolbox/Skills/vault-session-close.md` for manual steps).
+
+---
+
+## Vault Structure
+
+```
+claude-vault/
+  hot.md              ← session cache (read first)
+  index.md            ← master catalog
+  log.md              ← append-only operations log
+  Inbox/              ← zero-friction capture; process with vault-ingest
+  Projects/
+    _Active/          ← current work
+    _Parked/          ← paused, will resume
+    _Archive/         ← done or abandoned
+  Research/           ← background knowledge by topic
+  Knowledge/          ← reusable technical patterns
+  Templates/          ← PRD, project protocol
+  Claude/
+    Session-Logs/     ← per-session summaries
+    Toolbox/          ← harness reference: agents, skills, hooks, MCP, commands
+    Scratch/          ← temp drafts
+```
+
+---
 
 ## Active Projects
-<!-- Add your active projects here, e.g.: -->
-<!-- - [[Projects/My Project/Current State]] -->
+
+| Project | Path | Status |
+|---------|------|--------|
+<!-- Add active projects here: | Project Name | `Projects/_Active/Name/` | brief status | -->
+
+See `Projects/Roadmap.md` for full project sequence and dependencies.
+
+---
+
+## Formatting Conventions
+
+- YAML frontmatter on all notes: `tags`, `created`, `status`
+- Headings for structure — not bold text as pseudo-headings
+- Wikilinks `[[Note Name]]` for internal links
+- Nested tags: `#project/active`, `#status/draft`, `#type/log`
+- Callouts `> [!note]` for highlighted info
+
+---
+
+## Skills
+
+Vault skills live in `Claude/Toolbox/Skills/`. Read the skill file to execute.
+
+| Skill | When to use |
+|-------|-------------|
+| `vault-session-close.md` | End of every session |
+| `vault-ingest.md` | Processing Inbox/ items or raw materials into notes |
+| `vault-lint.md` | Monthly health check — broken links, stale notes, missing frontmatter |
+| `read-project-notes.md` | Get structured project context (used by agent profiles) |
