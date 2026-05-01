@@ -16,19 +16,41 @@ Three guides are included in the `Getting Started/` folder:
 
 ## Setup
 
+### Option A — GitHub Template (recommended)
+
+1. Click **Use this template** → **Create a new repository** on GitHub
+2. Name it (e.g. `claude-vault`) and set visibility to **Private**
+3. Clone your new repo locally:
+   ```bash
+   git clone git@github.com:<you>/claude-vault.git ~/vaults/claude-vault
+   ```
+4. Open Obsidian → **Open folder as vault** → point to `~/vaults/claude-vault`
+
+Your vault starts with a clean git history — no template commits carried over.
+
+### Option B — Manual Copy
+
+If you're setting up a shared group vault or want full control:
+
 ```bash
-git clone https://github.com/rjames-dev/obsidian-vault-template ~/code/claude-vault
+# Clone the template
+git clone https://github.com/rjames-dev/claude-vault-template.git ~/vaults/claude-vault
+
+# Remove the template's git history
+cd ~/vaults/claude-vault
+rm -rf .git
+
+# Start a fresh repo
+git init
+git add -A
+git commit -m "initial vault"
+
+# Push to your own repo
+git remote add origin git@github.com:<you>/claude-vault.git
+git push -u origin main
 ```
 
-Then open Obsidian → **Open folder as vault** → point to `~/code/claude-vault`.
-
-> **Important:** Detach from the template remote and push to your own private repository:
-> ```bash
-> cd ~/code/claude-vault
-> git remote remove origin
-> git remote add origin git@github.com:<you>/<your-vault>.git
-> git push -u origin main
-> ```
+Then open Obsidian → **Open folder as vault** → point to `~/vaults/claude-vault`.
 
 ## Folder Structure
 

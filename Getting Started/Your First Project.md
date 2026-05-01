@@ -98,15 +98,16 @@ Add a row to `Projects/Roadmap.md` with the current gate or milestone. This is u
 
 ## 6. Make the Vault Your Own (Git Setup)
 
-This template is a starting point — detach it from the template remote and push to your own private repository.
+If you used the **Use this template** button on GitHub, your vault already has its own clean repo — nothing to do here.
+
+If you cloned manually, detach from the template and start a fresh history:
 
 ```bash
-cd ~/code/claude-vault
-
-# Remove the template remote
-git remote remove origin
-
-# Create a new private repo on GitHub (or your preferred host), then:
+cd ~/vaults/claude-vault
+rm -rf .git
+git init
+git add -A
+git commit -m "initial vault"
 git remote add origin git@github.com:<your-username>/<your-vault-repo>.git
 git push -u origin main
 ```
