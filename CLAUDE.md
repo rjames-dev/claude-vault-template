@@ -40,7 +40,7 @@ claude-vault/
 
 | Project | Path | Status |
 |---------|------|--------|
-<!-- Add active projects here: | Project Name | `Projects/_Active/Name/` | brief status | -->
+| compose-orientation | `Projects/_Active/compose-orientation/` | orientation complete; infrastructure repo not yet located |
 
 See `Projects/Roadmap.md` for full project sequence and dependencies.
 
