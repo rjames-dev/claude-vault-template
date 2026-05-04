@@ -15,7 +15,7 @@ Full sequence of projects with dependencies and priority order. Update as projec
 
 | Project | Gate / Current Milestone | Dependencies |
 |---------|--------------------------|--------------|
-| compose-orientation | Locate infrastructure repo; confirm prod Logos backend routing | none |
+| <!-- Project Name --> | <!-- current blocker or next milestone --> | <!-- depends on --> |
 
 ---
 

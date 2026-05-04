@@ -32,7 +32,7 @@ All project work, split by lifecycle status.
 
 | Subfolder | Contents |
 |-----------|---------|
-| `_Active/` | compose-orientation — full architecture + interconnection map for socratics-v2-prototype, v2-backend, v2-frontend |
+| `_Active/` | <!-- list active projects --> |
 | `_Parked/` | <!-- list parked projects --> |
 | `_Archive/` | <!-- list archived projects --> |
 
